@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Youtube's Europe - Civilizations (9500 BC)</title>
   <style>
+    /* Basic site styling */
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
@@ -31,6 +32,63 @@
     .announcement p {
       margin: 10px 0;
     }
+
+    /* Map & Color Key Layout */
+    .map-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 20px auto;
+    }
+    .map-container {
+      flex: 1;
+      min-width: 400px;
+      max-width: 800px;
+      position: relative;
+    }
+    .map-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid #ccc;
+    }
+
+    /* Color Key for the map regions */
+    .color-key {
+      flex: 0 0 200px; /* fixed width for the key */
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      max-height: fit-content;
+      align-self: start; /* Aligns the key at the top if the map is taller */
+    }
+    .color-key h2 {
+      margin-top: 0;
+      font-size: 18px;
+      text-align: center;
+    }
+    .color-key ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .color-key li {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+    }
+    .color-box {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-right: 10px;
+      border: 1px solid #333;
+    }
+
+    /* Cards container styling */
     .container {
       padding: 20px;
       display: flex;
@@ -85,7 +143,6 @@
     <p>Proto-Civilizations of 9500 BC</p>
   </header>
   
-  <!-- Optional Announcement Section -->
   <div class="announcement">
     <p><strong>Like</strong> to 1.5x one of these statistics</p>
     <p><strong>Subscribe</strong> to 1.5x one of these statistics</p>
@@ -94,164 +151,193 @@
     <p>Like and subscribe and comment a civilization to have a chance of it being started in the series.</p>
   </div>
 
-  <div class="container" id="cards-container"></div>
+  <!-- Map and Color Key Side by Side -->
+  <div class="map-row">
+    <div class="map-container">
+      <!-- Replace 'Youtube'sEurope.png' with your actual map file name -->
+      <img src="Youtube'sEurope.png" alt="Map of Civilizations">
+    </div>
 
+    <!-- Color Key for the map regions -->z
+    <div class="color-key">
+      <h2>Color Key</h2>
+      <ul>
+        <li><span class="color-box" style="background:red;"></span> York</li>
+        <li><span class="color-box" style="background:#ffaa00;"></span> Istarska</li>
+        <li><span class="color-box" style="background:#ffff00;"></span> Trondeland</li>
+        <li><span class="color-box" style="background:#00ff00;"></span> Ankara</li>
+        <li><span class="color-box" style="background:cyan;"></span> Crambia</li>
+        <li><span class="color-box" style="background:#aa00ff;"></span> Satu Mare</li>
+        <li><span class="color-box" style="background:#ff00ff ;"></span> Polans Tribe</li>
+        <li><span class="color-box" style="background:#0055ff;"></span> Istanbul</li>
+        <li><span class="color-box" style="background:#00ffae;"></span> Yamnaya</li>
+        <li><span class="color-box" style="background:#00aaff;"></span> Gibraltar</li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- Civilization Cards -->
+  <div class="container" id="cards-container"></div>
+  
   <script>
-    /**
-     * Fictional data for seven prehistoric civilizations.
-     * "gdp" is in billions of USD (e.g., 0.008 = $8 million).
-     * "population" is in number of people.
-     * "populationDensity" is people per km².
-     * "founded" is the approximate date in BC.
-     */
+    // Sample civilizations data for dynamic card generation.
+    // Adjust stats or add more properties as needed.
     const civilizations = [
       {
         name: "York",
-        population: 32000,
-        populationDensity: 5,   // 5 people per km²
-        gdp: 0.008,            // $8 million
-        military: 200,
-        allies: 0,
-        enemies: 0,
+        population: 2629542,
+        populationDensity: 43,
+        gdp: 0.476,
+        military: 2026591        ,
+        allies: [],
+        enemies: [],
         founded: "10000 BC",
-        image: "https://via.placeholder.com/300x200?text=York"
-      },
-      {
-        name: "Istarska",
-        population: 28000,
-        populationDensity: 6,   // 6 people per km²
-        gdp: 0.009,            // $9 million
-        military: 180,
-        allies: 0,
-        enemies: 1,
-        founded: "9500 BC",
-        image: "https://via.placeholder.com/300x200?text=Istarska"
       },
       {
         name: "Trondeland",
-        population: 26000,
-        populationDensity: 4,   // 4 people per km²
-        gdp: 0.007,            // $7 million
-        military: 150,
-        allies: 0,
-        enemies: 0,
+        population: 644288,
+        populationDensity: 11,
+        gdp: 0.096,
+        military: 566221,
+        allies: [],
+        enemies: [],
         founded: "9500 BC",
-        image: "https://via.placeholder.com/300x200?text=Trondeland"
-      },
-      {
-        name: "Ankara",
-        population: 40000,
-        populationDensity: 8,   // 8 people per km²
-        gdp: 0.010,            // $10 million
-        military: 300,
-        allies: 1,
-        enemies: 0,
-        founded: "9500 BC",
-        image: "https://via.placeholder.com/300x200?text=Ankara"
       },
       {
         name: "Crambia",
-        population: 35000,
-        populationDensity: 5,   // 5 people per km²
-        gdp: 0.009,            // $9 million
-        military: 250,
-        allies: 0,
-        enemies: 1,
+        population: 423362,
+        populationDensity: 93,
+        gdp: 0.065,
+        military: 281850,
+        allies: [],
+        enemies: [],
         founded: "9500 BC",
-        image: "https://via.placeholder.com/300x200?text=Crambia"
       },
       {
         name: "Satu Mare",
-        population: 37000,
-        populationDensity: 7,   // 7 people per km²
-        gdp: 0.012,            // $12 million
-        military: 220,
-        allies: 1,
-        enemies: 0,
+        population: 217805,
+        populationDensity: 85,
+        gdp: 0.082,
+        military: 173992,
+        allies: [],
+        enemies: [],
         founded: "9500 BC",
-        image: "https://via.placeholder.com/300x200?text=Satu+Mare"
       },
       {
         name: "Polans Tribe",
-        population: 29000,
-        populationDensity: 4,   // 4 people per km²
-        gdp: 0.008,            // $8 million
-        military: 190,
-        allies: 0,
-        enemies: 0,
+        population: 937657,
+        populationDensity: 71,
+        gdp: 0.074,
+        military: 119132,
+        allies: [],
+        enemies: [],
         founded: "9500 BC",
-        image: "https://via.placeholder.com/300x200?text=Polans+Tribe"
-      }
+      },
+      {
+        name: "Istarska",
+        population: 105650,
+        populationDensity: 3,
+        gdp: 0.005,
+        military: 68756,
+        allies: [],
+        enemies: [],
+        founded: "9500 BC",
+      },
+      {
+        name: "Ankara",
+        population: 141174,
+        populationDensity: 64,
+        gdp: 0.07,
+        military: 139154,
+        allies: [],
+        enemies: [],
+        founded: "9500 BC",
+      },
+      {
+        name: "Istanbul",
+        population: 699389,
+        populationDensity: 57,
+        gdp: 0.068,
+        military: 683519,
+        allies: [],
+        enemies: [],
+        founded: "9500 BC",
+      },
+      {
+        name: "Yamnaya",
+        population: 669046,
+        populationDensity: 86,
+        gdp: 0.026,
+        military: 200588,
+        allies: [],
+        enemies: [],
+        founded: "9500 BC",
+      },
+      {
+        name: "Gibraltar",
+        population: 440245,
+        populationDensity: 65,
+        gdp: 0.045,
+        military: 383503,
+        allies: [],
+        enemies: [],
+        founded: "9500 BC",
+      },
     ];
-
-    /**
-     * Computes land area by dividing population by populationDensity.
-     */
+    
+    // Calculate land area (population / density).
     function computeLandArea(civ) {
-      return (civ.population / civ.populationDensity);
+      return civ.population / civ.populationDensity;
     }
-
-    /**
-     * Example formula for automatically generating HDI from GDP per capita:
-     * 
-     * HDI = 0.1 + 0.9 * clamp( ( (GDP in dollars) / population ) / 1000 , 0, 1 )
-     * 
-     * - If GDP per capita is $1000 or above, HDI approaches 1.0 (capped).
-     * - If GDP per capita is $0, HDI remains at 0.1 (the minimum).
-     */
+    
+    // Fictional HDI calculation.
     function computeHDI(civ) {
-      const gdpDollars = civ.gdp * 1e9;    // convert billions to dollars
+      const gdpDollars = civ.gdp * 1e9;
       const gdpPerCapita = gdpDollars / civ.population;
-      const ratio = gdpPerCapita / 1000;   // scale factor
-      const clamped = Math.max(0, Math.min(ratio, 1)); // clamp between 0 and 1
-      const hdi = 0.1 + 0.9 * clamped;     // scale between 0.1 and 1.0
-      return hdi;
+      const ratio = gdpPerCapita / 1000;
+      const clamped = Math.max(0, Math.min(ratio, 1));
+      return 0.1 + 0.9 * clamped;
     }
-
-    /**
-     * Example formula for "Effective GDP per Capita":
-     * E-GDP = ( GDP (in $) * HDI * (Allies + 1) ) / ( Population * (Enemies + 1) )
-     */
+    
+    // Effective GDP per Capita formula.
     function computeEffectiveGDPPerCapita(civ, hdi) {
       const gdpDollars = civ.gdp * 1e9;
-      const numerator = gdpDollars * hdi * (civ.allies + 1);
-      const denominator = civ.population * (civ.enemies + 1);
-      const result = numerator / denominator;
-      return result;
+      const alliesCount = civ.allies.length;
+      const enemiesCount = civ.enemies.length;
+      return (gdpDollars * hdi * (alliesCount + 1)) / (civ.population * (enemiesCount + 1));
     }
-
-    // Generate the cards dynamically
+    
+    // Generate civilization cards.
     const container = document.getElementById('cards-container');
-
     civilizations.forEach(civ => {
       const card = document.createElement('div');
       card.classList.add('card');
-
-      // Card header
+      
       const header = document.createElement('div');
       header.classList.add('card-header');
       header.textContent = civ.name;
       card.appendChild(header);
-
-      // Image
-      if (civ.image) {
-        const img = document.createElement('img');
-        img.classList.add('card-image');
-        img.src = civ.image;
-        img.alt = `${civ.name} image`;
-        card.appendChild(img);
-      }
-
-      // Body
+      
+      // If you have an image for each civ, you can add it here.
+      // Example:
+      // if (civ.image) {
+      //   const img = document.createElement('img');
+      //   img.classList.add('card-image');
+      //   img.src = civ.image;
+      //   img.alt = `${civ.name} image`;
+      //   card.appendChild(img);
+      // }
+      
       const body = document.createElement('div');
       body.classList.add('card-body');
-
-      // Compute auto-values
+      
       const landArea = computeLandArea(civ);
       const hdi = computeHDI(civ);
       const effectiveGDP = computeEffectiveGDPPerCapita(civ, hdi);
-
-      // Build content
+      
+      const alliesText = civ.allies.length > 0 ? civ.allies.join(", ") : "None";
+      const enemiesText = civ.enemies.length > 0 ? civ.enemies.join(", ") : "None";
+      
       body.innerHTML = `
         <p><span>Population:</span> ${civ.population.toLocaleString()}</p>
         <p><span>Population Density:</span> ${civ.populationDensity} people/km²</p>
@@ -259,12 +345,11 @@
         <p><span>Military Personnel:</span> ${civ.military.toLocaleString()}</p>
         <p><span>GDP:</span> ${civ.gdp} Billion USD</p>
         <p><span>HDI (auto):</span> ${hdi.toFixed(2)}</p>
-        <p><span>Allies:</span> ${civ.allies}</p>
-        <p><span>Enemies:</span> ${civ.enemies}</p>
+        <p><span>Allies:</span> ${alliesText}</p>
+        <p><span>Enemies:</span> ${enemiesText}</p>
         <p><span>Date Founded:</span> ${civ.founded}</p>
         <p><span>Effective GDP per Capita:</span> $${effectiveGDP.toFixed(2)}</p>
       `;
-
       card.appendChild(body);
       container.appendChild(card);
     });
