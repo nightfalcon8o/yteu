@@ -116,11 +116,6 @@
       text-align: center;
       font-size: 1.2em;
     }
-    .card-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
     .card-body {
       padding: 15px;
       display: flex;
@@ -134,6 +129,55 @@
     }
     .card-body p span {
       font-weight: bold;
+    }
+
+    /* Comment system styling */
+    .comments-section {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+    }
+    .comments-section h2 {
+      margin-top: 0;
+    }
+    .comments-section textarea {
+      width: 100%;
+      height: 60px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    .comments-section button {
+      padding: 8px 16px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .comments-section button:hover {
+      background: #555;
+    }
+    .comments-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .comments-list li {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      padding: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -158,7 +202,7 @@
       <img src="Youtube'sEurope.png" alt="Map of Civilizations">
     </div>
 
-    <!-- Color Key for the map regions -->z
+    <!-- Color Key for the map regions -->
     <div class="color-key">
       <h2>Color Key</h2>
       <ul>
@@ -168,7 +212,7 @@
         <li><span class="color-box" style="background:#00ff00;"></span> Ankara</li>
         <li><span class="color-box" style="background:cyan;"></span> Crambia</li>
         <li><span class="color-box" style="background:#aa00ff;"></span> Satu Mare</li>
-        <li><span class="color-box" style="background:#ff00ff ;"></span> Polans Tribe</li>
+        <li><span class="color-box" style="background:#ff00ff;"></span> Polans Tribe</li>
         <li><span class="color-box" style="background:#0055ff;"></span> Istanbul</li>
         <li><span class="color-box" style="background:#00ffae;"></span> Yamnaya</li>
         <li><span class="color-box" style="background:#00aaff;"></span> Gibraltar</li>
@@ -179,16 +223,25 @@
   <!-- Civilization Cards -->
   <div class="container" id="cards-container"></div>
   
+  <!-- Comment Section -->
+  <div class="comments-section">
+    <h2>Comments</h2>
+    <textarea id="comment-input" placeholder="Leave a comment..."></textarea>
+    <button id="submit-comment">Submit</button>
+    <ul id="comments-list" class="comments-list"></ul>
+  </div>
+
   <script>
-    // Sample civilizations data for dynamic card generation.
-    // Adjust stats or add more properties as needed.
+    // =======================
+    // Civilization Data
+    // =======================
     const civilizations = [
       {
         name: "York",
         population: 2629542,
         populationDensity: 43,
         gdp: 0.476,
-        military: 2026591        ,
+        military: 2026591,
         allies: [],
         enemies: [],
         founded: "10000 BC",
@@ -285,13 +338,15 @@
       },
     ];
     
-    // Calculate land area (population / density).
+    // =======================
+    // Calculation Functions
+    // =======================
     function computeLandArea(civ) {
       return civ.population / civ.populationDensity;
     }
     
-    // Fictional HDI calculation.
     function computeHDI(civ) {
+      // Fictional formula
       const gdpDollars = civ.gdp * 1e9;
       const gdpPerCapita = gdpDollars / civ.population;
       const ratio = gdpPerCapita / 1000;
@@ -299,7 +354,6 @@
       return 0.1 + 0.9 * clamped;
     }
     
-    // Effective GDP per Capita formula.
     function computeEffectiveGDPPerCapita(civ, hdi) {
       const gdpDollars = civ.gdp * 1e9;
       const alliesCount = civ.allies.length;
@@ -307,7 +361,9 @@
       return (gdpDollars * hdi * (alliesCount + 1)) / (civ.population * (enemiesCount + 1));
     }
     
-    // Generate civilization cards.
+    // =======================
+    // Generate Civilization Cards
+    // =======================
     const container = document.getElementById('cards-container');
     civilizations.forEach(civ => {
       const card = document.createElement('div');
@@ -318,8 +374,7 @@
       header.textContent = civ.name;
       card.appendChild(header);
       
-      // If you have an image for each civ, you can add it here.
-      // Example:
+      // If you have an image for each civ, you can add it here:
       // if (civ.image) {
       //   const img = document.createElement('img');
       //   img.classList.add('card-image');
@@ -353,6 +408,51 @@
       card.appendChild(body);
       container.appendChild(card);
     });
+
+    // =======================
+    // Comment System
+    // =======================
+    let comments = [];
+
+    // DOM elements
+    const commentInput = document.getElementById('comment-input');
+    const submitCommentBtn = document.getElementById('submit-comment');
+    const commentsList = document.getElementById('comments-list');
+
+    // Load any existing comments from localStorage
+    window.addEventListener('load', () => {
+      const storedComments = localStorage.getItem('comments');
+      if (storedComments) {
+        comments = JSON.parse(storedComments);
+      }
+      displayComments();
+    });
+
+    // Submit button event
+    submitCommentBtn.addEventListener('click', () => {
+      const text = commentInput.value.trim();
+      if (text) {
+        comments.push(text);
+        commentInput.value = "";
+        displayComments();
+        saveComments();
+      }
+    });
+
+    // Display all comments
+    function displayComments() {
+      commentsList.innerHTML = "";
+      comments.forEach(comment => {
+        const li = document.createElement('li');
+        li.textContent = comment;
+        commentsList.appendChild(li);
+      });
+    }
+
+    // Save comments to localStorage
+    function saveComments() {
+      localStorage.setItem('comments', JSON.stringify(comments));
+    }
   </script>
 </body>
 </html>
